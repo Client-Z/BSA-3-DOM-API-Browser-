@@ -1,7 +1,3 @@
-/*var sort = require('sortByTagName');
-var funcSort = sort.sortByTags;		// получаем ф-ю сортировки по тегам
-*/
-
 function renderHTML(articles) {
 	var container = document.getElementById("container");
 
@@ -97,7 +93,6 @@ function renderTagsForm() {
 			tagForm.appendChild(label);
 
 	}
-	console.log(tags);
 }
 
 function toggleCheckbox() {
@@ -115,37 +110,10 @@ function toggleCheckbox() {
 			}
 			var serialCheckedTags = JSON.stringify(checkedTags); //сериализуем его
  			localStorage.setItem("tags", serialCheckedTags); //запишем его в хранилище по ключ
- 			var renderArticles = sortByTag(checkedTags);
+ 			arrArticles = sortByTag(checkedTags);
  			document.getElementById("container").innerHTML = '';
-			renderHTML(renderArticles);
+ 			renderDatasPart = arrArticles.slice(0, segment + 10);
+			renderHTML(renderDatasPart);
 		});
 	}
-}
-
-function sortByTag(tags) {
-	var suitableArticleByTag = [];
-	var mustDelete = 0;
-	for (var i = 0; i < arrArticles.length; i++) {
-		for (var j = 0; j < arrArticles[i].tags.length; j++) {
-			if (tags.indexOf(arrArticles[i].tags[j]) != -1) {
-				suitableArticleByTag.push(arrArticles[i]);
-				mustDelete = 1;
-			}
-		}
-		if (mustDelete) {
-			mustDelete = 0;
-			arrArticles.splice(i, 1);
-		}
-	}
-	
-	suitableArticleByTag.sort(function(a,b) { 
-		return a.tags.length - b.tags.length;
-	});
-	console.log(suitableArticleByTag);
-	return suitableArticleByTag;
-
-}
-
-function clearContainer() {
-	document.getElementById("container").innerHTML = '';
 }

@@ -15,6 +15,7 @@ searchInput.addEventListener("input", function() {
 
 	if(searchInput.value.length <= 1){
 		document.getElementById("container").innerHTML = '';
+		renderDatasPart = arrArticles.slice(0, segment + 10);
 		renderHTML(renderDatasPart);
 	}
 });
