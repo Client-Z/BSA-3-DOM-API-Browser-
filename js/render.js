@@ -114,27 +114,34 @@ function toggleCheckbox() {
 				console.log(checkedTags);
 			}
 			var serialCheckedTags = JSON.stringify(checkedTags); //сериализуем его
- 			localStorage.setItem("tags", serialCheckedTags); //запишем его в хранилище по ключу
-
- 			// сортировка по тегам sortByTag(checkedTags) передадим выбранные теги в ф-ю сортировки по тегам
+ 			localStorage.setItem("tags", serialCheckedTags); //запишем его в хранилище по ключ
+ 			var renderArticles = sortByTag(checkedTags);
+ 			document.getElementById("container").innerHTML = '';
+			renderHTML(renderArticles);
 		});
 	}
 }
 
 function sortByTag(tags) {
 	var suitableArticleByTag = [];
+	var mustDelete = 0;
 	for (var i = 0; i < arrArticles.length; i++) {
 		for (var j = 0; j < arrArticles[i].tags.length; j++) {
 			if (tags.indexOf(arrArticles[i].tags[j]) != -1) {
 				suitableArticleByTag.push(arrArticles[i]);
+				mustDelete = 1;
 			}
+		}
+		if (mustDelete) {
+			mustDelete = 0;
+			arrArticles.splice(i, 1);
 		}
 	}
 	
 	suitableArticleByTag.sort(function(a,b) { 
 		return a.tags.length - b.tags.length;
 	});
-
+	console.log(suitableArticleByTag);
 	return suitableArticleByTag;
 
 }

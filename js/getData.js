@@ -11,23 +11,27 @@ xhr.onload = function(){
 	var articles_obj = JSON.parse(articlesJSON);
 	arrArticles = articles_obj.data;
 
-	// если будет время, перенести проверку в ф-ю renderTagsForm
+	var arrArticlesForRender = [];
+
+	arrArticles.sort(function(a,b) { 
+		return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
+	});
+
 	if(!localStorage.tags){
 		renderTagsForm();
 		toggleCheckbox();
-		
-		arrArticles.sort(function(a,b) { 
-    		return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
-		});
-
-		renderDatasPart = arrArticles.slice(segment, segment + 10);
+		arrArticlesForRender = arrArticles;
+		renderDatasPart = arrArticlesForRender.slice(segment, segment + 10);
 		renderHTML(renderDatasPart);
 		segment += 10;
 
 	} else {
 		var localTags = JSON.parse(localStorage.getItem("tags")) //спарсим его обратно объект
-		var tagsForRender = sortByTag(localTags);  // передать выбранные теги из хранилища в ф-ю сортировки по тегам	
-		renderHTML(tagsForRender);
+		arrArticlesForRender = sortByTag(localTags);  // передать выбранные теги из хранилища в ф-ю сортировки по тегам
+
+		arrArticlesForRender.concat(arrArticles);
+		renderDatasPart = arrArticlesForRender.slice(segment, segment + 10);
+		renderHTML(renderDatasPart);
 	} 
 
 	
